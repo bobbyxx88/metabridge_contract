@@ -1,4 +1,4 @@
-from flask import Flask, request, send_file, jsonify
+from flask import Flask, request, send_file, jsonify, session
 from flask_cors import CORS
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
@@ -10,7 +10,36 @@ from datetime import datetime
 import os
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, supports_credentials=True)
+app.secret_key = 'kt_bridge_secret_key_2025_secure_random_string'  # Chiave segreta per le sessioni
+
+# Credenziali di accesso
+USERNAME = 'kappabridgeteam'
+PASSWORD = 'kt2025!@@'
+
+@app.route('/login', methods=['POST'])
+def login():
+    """Endpoint per il login"""
+    data = request.get_json()
+    username = data.get('username', '')
+    password = data.get('password', '')
+    
+    if username == USERNAME and password == PASSWORD:
+        session['authenticated'] = True
+        return jsonify({'success': True})
+    else:
+        return jsonify({'success': False, 'error': 'Credenziali non valide'}), 401
+
+@app.route('/check-auth', methods=['GET'])
+def check_auth():
+    """Verifica se l'utente è autenticato"""
+    return jsonify({'authenticated': session.get('authenticated', False)})
+
+@app.route('/logout', methods=['POST'])
+def logout():
+    """Logout dell'utente"""
+    session.pop('authenticated', None)
+    return jsonify({'success': True})
 
 def format_date(date_str):
     """Converte data da formato ISO a formato italiano"""
