@@ -540,6 +540,9 @@ def generate_contract_pdf(data):
     c.drawCentredString(width/2, 35, footer_text)
     c.drawCentredString(width/2, 23, "Family, leader nelle soluzioni adv ad alto rendimento.")
     
+    # PAGINE INFORMATIVA PRIVACY GDPR
+    draw_privacy_pages_agency(c, width, height)
+    
     c.save()
     buffer.seek(0)
     return buffer
@@ -570,3 +573,198 @@ def generate_contract():
 # Per uso locale
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=8080)
+def draw_privacy_pages_agency(c, width, height):
+    """Aggiunge pagine informativa privacy GDPR per contratto Agency"""
+    margin_left = 70
+    
+    # PAGINA PRIVACY 1
+    c.showPage()
+    y = height - 50
+    
+    c.setFont("Helvetica-Bold", 14)
+    c.drawCentredString(width/2, y, "INFORMATIVA SUL TRATTAMENTO DEI DATI PERSONALI")
+    y -= 18
+    c.drawCentredString(width/2, y, "(ai sensi dell'art. 13 del Regolamento UE 2016/679)")
+    y -= 30
+    
+    c.setFont("Helvetica", 10)
+    
+    # Introduzione
+    intro_lines = [
+        "Kappa Team S.r.l., in qualità di Titolare del trattamento, fornisce la presente informativa",
+        "in merito al trattamento dei dati personali raccolti nell'ambito del presente contratto di",
+        "gestione pubblicitaria e servizi advertising."
+    ]
+    for line in intro_lines:
+        c.drawString(margin_left, y, line)
+        y -= 14
+    y -= 10
+    
+    # 1. TITOLARE DEL TRATTAMENTO
+    c.setFont("Helvetica-Bold", 11)
+    c.drawString(margin_left, y, "1. TITOLARE DEL TRATTAMENTO")
+    y -= 16
+    
+    c.setFont("Helvetica", 10)
+    titolare_lines = [
+        "Kappa Team S.r.l. (MetaBridge™)",
+        "Sede legale: Via Enrico De Nicola n. 63, 76125 Trani (BT)",
+        "P.IVA: IT12687960968",
+        "Email: amministrativokteam@gmail.com"
+    ]
+    for line in titolare_lines:
+        c.drawString(margin_left, y, line)
+        y -= 14
+    y -= 10
+    
+    # 2. FINALITÀ E BASE GIURIDICA
+    c.setFont("Helvetica-Bold", 11)
+    c.drawString(margin_left, y, "2. FINALITÀ E BASE GIURIDICA DEL TRATTAMENTO")
+    y -= 16
+    
+    c.setFont("Helvetica", 10)
+    finalita_lines = [
+        "I dati personali sono trattati per le seguenti finalità:",
+        "",
+        "a) Esecuzione del contratto: gestione del rapporto contrattuale, erogazione dei servizi",
+        "   di advertising e marketing digitale, gestione account pubblicitari, reportistica.",
+        "   Base giuridica: esecuzione del contratto (art. 6, par. 1, lett. b del GDPR).",
+        "",
+        "b) Obblighi di legge: adempimenti contabili, fiscali e amministrativi previsti dalla",
+        "   normativa vigente.",
+        "   Base giuridica: adempimento di obblighi legali (art. 6, par. 1, lett. c del GDPR).",
+        "",
+        "c) Tutela di diritti: difesa di diritti in sede giudiziaria o stragiudiziale.",
+        "   Base giuridica: legittimo interesse del Titolare (art. 6, par. 1, lett. f del GDPR)."
+    ]
+    for line in finalita_lines:
+        if line:
+            c.drawString(margin_left, y, line)
+        y -= 14
+        if y < 100:
+            break
+    
+    y -= 10
+    
+    # 3. CATEGORIE DI DATI
+    c.setFont("Helvetica-Bold", 11)
+    c.drawString(margin_left, y, "3. CATEGORIE DI DATI PERSONALI TRATTATI")
+    y -= 16
+    
+    c.setFont("Helvetica", 10)
+    categorie_lines = [
+        "Sono oggetto di trattamento le seguenti categorie di dati personali:",
+        "- Dati anagrafici (nome, cognome, codice fiscale, data e luogo di nascita)",
+        "- Dati di contatto (indirizzo, email, numero di telefono)",
+        "- Dati relativi all'azienda (ragione sociale, sede, P.IVA)",
+        "- Dati relativi ai pagamenti (coordinate bancarie, importi, date versamenti)",
+        "- Dati relativi alle campagne pubblicitarie (account, performance, statistiche)"
+    ]
+    for line in categorie_lines:
+        c.drawString(margin_left, y, line)
+        y -= 14
+    
+    # Footer
+    c.setFont("Helvetica", 8)
+    c.drawCentredString(width/2, 35, "MetaBridge™ – Operato da Kappa Team S.r.l. – Italia")
+    
+    # PAGINA PRIVACY 2
+    c.showPage()
+    y = height - 50
+    
+    # 4. MODALITÀ E DURATA
+    c.setFont("Helvetica-Bold", 11)
+    c.drawString(margin_left, y, "4. MODALITÀ E DURATA DEL TRATTAMENTO")
+    y -= 16
+    
+    c.setFont("Helvetica", 10)
+    modalita_lines = [
+        "I dati personali sono trattati con strumenti cartacei ed elettronici, con logiche strettamente",
+        "correlate alle finalità indicate e mediante l'adozione di misure di sicurezza adeguate.",
+        "",
+        "I dati saranno conservati per il tempo necessario all'esecuzione del contratto e",
+        "successivamente per il periodo previsto dalla normativa fiscale e civilistica (10 anni)."
+    ]
+    for line in modalita_lines:
+        if line:
+            c.drawString(margin_left, y, line)
+        y -= 14
+    y -= 10
+    
+    # 5. DESTINATARI
+    c.setFont("Helvetica-Bold", 11)
+    c.drawString(margin_left, y, "5. DESTINATARI DEI DATI PERSONALI")
+    y -= 16
+    
+    c.setFont("Helvetica", 10)
+    destinatari_lines = [
+        "I dati personali potranno essere comunicati a:",
+        "- Piattaforme pubblicitarie (Meta, Google, TikTok, ecc.) per gestione campagne",
+        "- Fornitori di servizi tecnici e infrastrutturali",
+        "- Istituti bancari per la gestione dei pagamenti",
+        "- Commercialisti e consulenti fiscali per adempimenti contabili",
+        "- Autorità pubbliche e forze dell'ordine, ove richiesto per legge"
+    ]
+    for line in destinatari_lines:
+        c.drawString(margin_left, y, line)
+        y -= 14
+    y -= 10
+    
+    # 6. DIRITTI DELL'INTERESSATO
+    c.setFont("Helvetica-Bold", 11)
+    c.drawString(margin_left, y, "6. DIRITTI DELL'INTERESSATO")
+    y -= 16
+    
+    c.setFont("Helvetica", 10)
+    diritti_lines = [
+        "L'interessato ha diritto di:",
+        "- Accedere ai propri dati personali (art. 15 GDPR)",
+        "- Ottenere la rettifica dei dati inesatti (art. 16 GDPR)",
+        "- Ottenere la cancellazione dei dati (art. 17 GDPR)",
+        "- Ottenere la limitazione del trattamento (art. 18 GDPR)",
+        "- Opporsi al trattamento (art. 21 GDPR)",
+        "- Richiedere la portabilità dei dati (art. 20 GDPR)",
+        "- Proporre reclamo all'Autorità Garante per la Protezione dei Dati Personali",
+        "  (www.garanteprivacy.it)",
+        "",
+        "Per esercitare tali diritti, l'interessato può contattare il Titolare del trattamento",
+        "all'indirizzo email: amministrativokteam@gmail.com"
+    ]
+    for line in diritti_lines:
+        if line:
+            c.drawString(margin_left, y, line)
+        y -= 14
+    y -= 10
+    
+    # 7. CONSENSO
+    c.setFont("Helvetica-Bold", 11)
+    c.drawString(margin_left, y, "7. CONSENSO AL TRATTAMENTO")
+    y -= 16
+    
+    c.setFont("Helvetica", 10)
+    consenso_lines = [
+        "Con la sottoscrizione del presente contratto, l'interessato dichiara di aver ricevuto",
+        "l'informativa sul trattamento dei dati personali ai sensi dell'art. 13 del GDPR e di",
+        "prestare il proprio consenso al trattamento per le finalità indicate."
+    ]
+    for line in consenso_lines:
+        c.drawString(margin_left, y, line)
+        y -= 14
+    
+    y -= 30
+    
+    # Data e luogo
+    c.setFont("Helvetica", 10)
+    c.drawString(margin_left, y, "Trani (BT), _______________")
+    y -= 30
+    
+    # Firma per presa visione
+    c.setFont("Helvetica-Bold", 10)
+    c.drawString(margin_left, y, "Firma del Cliente per presa visione e consenso")
+    y -= 10
+    c.setFont("Helvetica", 10)
+    c.drawString(margin_left, y, "_________________________________________")
+    
+    # Footer
+    c.setFont("Helvetica", 8)
+    c.drawCentredString(width/2, 35, "MetaBridge™ – Operato da Kappa Team S.r.l. – Italia")
