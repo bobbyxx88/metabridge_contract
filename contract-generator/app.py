@@ -375,8 +375,16 @@ def generate_contract_pdf(data):
     proxy_compreso = data.get('proxyCompreso', False)
     proxy_amount = 140 if data.get('profiloProxy') else 0
     
-    # Commissione SEMPRE calcolata sul budget iniziale (stesso importo)
-    commissione_val = budget_iniziale * percentuale / 100
+    # Se c'è importoBaseCommissione, usa quello per calcolare la commissione
+    importo_base = data.get('importoBaseCommissione', '')
+    if importo_base and float(importo_base) > 0:
+        base_calcolo = float(importo_base)
+        commissione_val = base_calcolo * percentuale / 100
+        commissione_su_importo_diverso = True
+    else:
+        base_calcolo = budget_iniziale
+        commissione_val = budget_iniziale * percentuale / 100
+        commissione_su_importo_diverso = False
     
     if commissione_compresa:
         # Budget netto = budget - commissione - proxy (se compreso)
@@ -394,10 +402,19 @@ def generate_contract_pdf(data):
     y -= 13
     
     # Testo commissione
-    if commissione_compresa:
-        c.drawString(70, y, f"{commissione} a titolo di commissione pari al {data['percentualeCommissione']}% (compresa nel totale);")
+    if commissione_su_importo_diverso:
+        # Se la commissione è calcolata su un importo diverso dal budget
+        importo_base_formatted = format_currency(base_calcolo)
+        if commissione_compresa:
+            c.drawString(70, y, f"{commissione} a titolo di commissione pari al {data['percentualeCommissione']}% calcolata su {importo_base_formatted} (compresa nel totale);")
+        else:
+            c.drawString(70, y, f"{commissione} a titolo di commissione pari al {data['percentualeCommissione']}% calcolata su {importo_base_formatted};")
     else:
-        c.drawString(70, y, f"{commissione} a titolo di commissione pari al {data['percentualeCommissione']}% sul budget pubblicitario;")
+        # Commissione normale calcolata sul budget
+        if commissione_compresa:
+            c.drawString(70, y, f"{commissione} a titolo di commissione pari al {data['percentualeCommissione']}% (compresa nel totale);")
+        else:
+            c.drawString(70, y, f"{commissione} a titolo di commissione pari al {data['percentualeCommissione']}% sul budget pubblicitario;")
     
     # Aggiungi proxy se selezionato
     if data.get('profiloProxy'):
